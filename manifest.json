@@ -4,7 +4,7 @@
   "version": "1.0",
 
   "description": "Adds dark mode to various sites for free",
-
+  "permissions": ["activeTab", "scripting"],
   "icons": {
     "48": "icons/nightshift-logo.svg",
     "96": "icons/nightshift-logo.svg"
@@ -19,10 +19,15 @@
     }
   },
 
+  "action": {
+    "default_popup": "popup/settings.html"
+  },
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["nightshift.js"]
+      "js": ["nightshift.js"],
+      "css": ["darkmode.css"]
     }
   ]
 }
