@@ -15,7 +15,7 @@ function activate(view, allElements){
   });
   function changeStyle(el) {
     if (el.tagName === 'HTML'){
-      el.className = darkModeActive ? "night-shift" : "none"
+      el.className = darkModeActive ? el.className + " night-shift" : el.className.replace(" night-shift", "");
     }
     el.style.filter = darkModeActive ? "invert(100%) hue-rotate(180deg)" : "none";
     }
@@ -28,7 +28,7 @@ function filter(view, allElements){
   filterActive = !filterActive;
   view.forEach(element => changeFilter(element));
   function changeFilter(el) {
-    el.className = "none";
+    el.className = el.className.replace(" night-shift", "");
     el.style.filter = filterActive ? "sepia(35%) brightness(90%)" : "none";
   }
   
