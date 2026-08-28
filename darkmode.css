@@ -1,4 +1,8 @@
-
-.night-shift img, .night-shift video, .night-shift picture, .night-shift iframe {
-  filter: invert(100%) hue-rotate(-180deg) !important;
+.night-shift {
+    filter: invert(100%) hue-rotate(-180deg) !important;
 }
+
+.night-shift img, .night-shift video, .night-shift iframe {
+    filter: invert(100%) hue-rotate(-180deg) !important;
+}
+

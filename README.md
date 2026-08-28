@@ -25,4 +25,15 @@ I am creating this darkmode extension because I want a customized solution for a
     - activateNightShift uses switch case to send proper response to nightshift.js
 
 ### ./nightshift.js
-    - 
+    - darkmode() enable/disables darkmode, if filter is on then it gets turned off in darkmode
+    - filter() enable/disables filter, if darkmode is on then it gets turned off in filter
+    - reset() disables all changes and returns site to original style
+    - save() saves current settings, {url : {darkmode : boolean, filter : boolean}}
+    - autoset() checks if current site has saved settings, if so it will enable which ever mode is default
+    - actively waits for popup response(button click) then will call necessary function
+
+## Future Improvements
+    - Code quality, remove redundancy, and seperation of concern
+    - Make popup UI more modern
+    - Add more filter settings(contrast, change color temp, brightness)
+    - Add manage saved sites to allow users to edit and remove 

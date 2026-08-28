@@ -5,14 +5,9 @@ async function activateNightShift(type) {
     if (!tab?.id) return;
     // 2. Send a message to that specific tab's content script
     let response;
-    switch (type) {
-        case "activate":
-            response = await browser.tabs.sendMessage(tab.id, { type: "activate" });
-            break;
-        case "filter":
-            response = await browser.tabs.sendMessage(tab.id, { type: "filter" });
-            break;
-    }
+    
+    response = await browser.tabs.sendMessage(tab.id, { type: type });
+    
     
     console.log("Content script responded:", response);
 }

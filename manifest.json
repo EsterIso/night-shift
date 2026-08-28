@@ -4,7 +4,7 @@
   "version": "1.0",
 
   "description": "Adds dark mode to various sites for free",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "icons": {
     "48": "icons/nightshift-logo.svg",
     "96": "icons/nightshift-logo.svg"
