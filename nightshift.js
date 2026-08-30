@@ -7,82 +7,63 @@ async function autoSet(){
   const hostname = window.location.hostname;
   const { siteSettings = {} } = await browser.storage.local.get("siteSettings");
   const saved = siteSettings[hostname];
+
   if (!saved) return;
 
-  const view = document.querySelectorAll('html');
-  const allElements = document.querySelectorAll('*');
+  const { html, allElements } = getElements();
 
   if (saved.darkmode) {
-    darkmode(view, allElements);
+    darkmode(html, allElements);
   } else if (saved.filter) {
-    filter(view, allElements);
+    filter(html, allElements);
   }
 }
 
+function getElements() {
+  const html = document.querySelectorAll('html');
+  const allElements = document.querySelectorAll('*');
+  return { html, allElements };
+}
+
 // sets darkmode to site
-function darkmode(view, allElements){
+function darkmode(html, allElements){
   if (darkModeActive) {
     return;
   }
 
-  reset(view, allElements);
+  reset(html, allElements);
   darkModeActive = true;
 
-  view.forEach(view => changeStyle(view))
+  html.forEach(html => html.classList.add("night-shift"))
   allElements.forEach(element => {
     const bg = getComputedStyle(element).backgroundImage;
     if (bg && bg !== "none"){
-      changeStyle(element)
+      element.classList.add("night-shift");
     }
   });
-
-  function changeStyle(el) {
-    if (el.tagName === 'HTML'){
-      el.className = darkModeActive ? el.className + " night-shift" : el.className.replace(" night-shift", "");
-    }
-    else {
-      el.className = darkModeActive ? el.className + " night-shift" : el.className.replace(" night-shift", "");
-    }
-    }
   }
 
 // sets filter to site
-function filter(view, allElements){
+function filter(html, allElements){
   if (filterActive){
     return;
   }
 
-  reset(view, allElements);
+  reset(html, allElements);
   filterActive = true;
 
-  view.forEach(element => changeFilter(element));
-
-  function changeFilter(el) {
-    el.className = el.className.replace(" night-shift", "");
-    el.style.filter = filterActive ? "sepia(35%) brightness(90%)" : "none";
-  }
+  html.forEach(element => {
+    element.style.filter = "sepia(35%) brightness(90%)";
+  });
   
 }
 
 // resets site to original style
-function reset(view, allElements) {
-  if (!darkModeActive && !filterActive) {
-    return;
-  }
+function reset(html, allElements) {
   darkModeActive = false;
-  view.forEach(element => original(element));
-  allElements.forEach(element => original(element));
-
-  function original(el) {
-    
-    if (filterActive && el.tagName == 'HTML') {
-      el.style.filter = 'none'
-      filterActive = false;
-      return;
-    }
-
-    el.className = el.className.toString().replace(" night-shift", "");
-  }
+  filterActive = false;
+  html.forEach(element => element.style.filter = "none");
+  allElements.forEach(element => element.classList.remove("night-shift"));
   
 }
 
@@ -106,24 +87,23 @@ async function save() {
   await browser.storage.local.set({siteSettings});
 }
 
-// runs autoSet at document loaded
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", autoSet);
+if (document.readyState === "complete") {
+    autoSet();
 } else {
-  autoSet();
+    window.addEventListener("load", autoSet);
 }
 
 // waits for popup response
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const view = document.querySelectorAll('html');
-  const allElements = document.querySelectorAll('*');
+  const { html, allElements } = getElements();
+
   if (message.type === "dark") {
-    darkmode(view, allElements);
+    darkmode(html, allElements);
     // Send a response back synchronously
     sendResponse({ reply: "Active Darkmode" });
   }
   else if (message.type === "filter"){
-    filter(view, allElements);
+    filter(html, allElements);
     sendResponse({ reply: "Active Filter" });
   }
   else if (message.type === "save") {
@@ -131,7 +111,7 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ reply: "Saved Settings" });
   }
   else if (message.type === "reset"){
-    reset(view, allElements);
+    reset(html, allElements);
     sendResponse({ reply: "Reset site" });
   }
 });

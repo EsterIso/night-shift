@@ -6,8 +6,8 @@
   "description": "Adds dark mode to various sites for free",
   "permissions": ["activeTab", "scripting", "storage"],
   "icons": {
-    "48": "icons/nightshift-logo.svg",
-    "96": "icons/nightshift-logo.svg"
+    "48": "icons/nightshiftlogo.svg",
+    "96": "icons/nightshiftlogo.svg"
   },
 
   "browser_specific_settings": {

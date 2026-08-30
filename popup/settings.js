@@ -12,9 +12,18 @@ async function activateNightShift(type) {
     console.log("Content script responded:", response);
 }
 
-const container = document.getElementById('style-buttons');
+const container = document.querySelector('.popup-content');
 container.addEventListener('click', (event) => {
+    const btn = event.target.closest('button');
+    if (!btn) return;
+    activateNightShift(btn.id);
     
-    activateNightShift(event.target.id);
-   
 });
+
+const styleButtons = document.querySelector('.style-buttons');
+const buttons = styleButtons.querySelectorAll(':scope > button');
+
+buttons.forEach(button => button.addEventListener('click', () => {
+  buttons.forEach(b => b.classList.remove('active'));
+  button.classList.add('active');
+}));
